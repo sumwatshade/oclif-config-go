@@ -49,9 +49,7 @@ func GetPluginInfo(PluginName string, Type string, hooksChannel chan HooksChanne
 		panic(err)
 	}
 
-	
 	implementedHooks := GetAllKeys(pluginInfo.Config.Hooks)
-	
 
 	var exposedCommands []string
 
@@ -68,9 +66,9 @@ func GetPluginInfo(PluginName string, Type string, hooksChannel chan HooksChanne
 		}
 	}
 
-	// log.Println("Plugin name: " + pluginInfo.Name)
-	// log.Println("\tHooks: " + strings.Join(implementedHooks, ", "))
-	// log.Println("\tCommands Exposed: " + strings.Join(exposedCommands, ", "))
+	LogPrintln("Plugin name: " + pluginInfo.Name)
+	LogPrintln("\tHooks: " + strings.Join(implementedHooks, ", "))
+	LogPrintln("\tCommands Exposed: " + strings.Join(exposedCommands, ", "))
 
 	for i := range exposedCommands {
 		commandsChannel <- CommandsChannelMessage{

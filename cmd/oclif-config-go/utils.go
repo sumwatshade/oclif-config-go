@@ -18,12 +18,13 @@ func ReadFileAsByte(filepath string) ([]byte, error) {
 
 	defer file.Close()
 
-	// log.Println("Successfully Opened " + filepath)
+	LogPrintln("Successfully Opened " + filepath)
 	byteValue, _ := ioutil.ReadAll(file)
 
 	return byteValue, err
 }
 
+// Gets all keys from a map, returned as a string array.
 func GetAllKeys(inputMap map[string]interface{}) []string {
 	keys := make([]string, 0, len(inputMap))
 	for k := range inputMap {
@@ -31,4 +32,11 @@ func GetAllKeys(inputMap map[string]interface{}) []string {
 	}
 
 	return keys
+}
+
+func LogPrintln(msg ...interface{}) {
+	debugEnv := os.Getenv("DEBUG")
+	if len(debugEnv) > 0 {
+		log.Println(msg...)
+	}
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"sync"
 )
 
@@ -42,10 +41,10 @@ func main() {
 	for i := 0; i < len(oclifManifestPackageJson.OclifConfig.Plugins); i++ {
 		plugin := oclifManifestPackageJson.OclifConfig.Plugins[i]
 
-		// log.Println("Plugin name: " + plugin.Name)
-		// log.Println("\tType: " + plugin.Type)
-		// log.Println("\tTag (if module): " + plugin.Tag)
-		// log.Println("\tRoot (if linked): " + plugin.Root)
+		LogPrintln("Plugin name: " + plugin.Name)
+		LogPrintln("\tType: " + plugin.Type)
+		LogPrintln("\tTag (if module): " + plugin.Tag)
+		LogPrintln("\tRoot (if linked): " + plugin.Root)
 
 		waitGroup.Add(1)
 		if plugin.Type == "link" {
@@ -63,7 +62,7 @@ func main() {
 			hookMsg := <-hooksChannel
 			hookList := hooks[hookMsg.Name]
 			hookList = append(hookList, hookMsg.OriginModule)
-			// log.Println("Hook Recieved: " + hookMsg.Name + " | " + hookMsg.OriginModule)
+			LogPrintln("Hook Recieved: " + hookMsg.Name + " | " + hookMsg.OriginModule)
 			hooks[hookMsg.Name] = hookList
 		}
 	}()
@@ -71,15 +70,15 @@ func main() {
 	go func() {
 		for {
 			commandMsg := <-commandsChannel
-			// log.Println("Hook Recieved: " + commandMsg.Name + " | " + commandMsg.OriginModule)
+			LogPrintln("Hook Recieved: " + commandMsg.Name + " | " + commandMsg.OriginModule)
 			commands[commandMsg.Name] = commandMsg.OriginModule
 		}
 	}()
 
 	waitGroup.Wait()
 
-	log.Println(commands)
-	log.Println(hooks)
+	LogPrintln(commands)
+	LogPrintln(hooks)
 
 	file, _ := json.MarshalIndent(Result{
 		Hooks:    hooks,
